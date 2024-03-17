@@ -1,5 +1,10 @@
 package br.com.fiap.aircheck.screens
 
+import android.content.Context
+import android.content.pm.PackageManager
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,6 +17,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.OutlinedTextField
@@ -24,16 +31,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import br.com.fiap.aircheck.R
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.maps.model.LatLng
 
 @Composable
 fun HomeScreen() {
@@ -50,12 +58,12 @@ fun HomeScreen() {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(320.dp)
             ) {
                 Card(
                     modifier = Modifier
                         .offset(y = (-10).dp)
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .height(450.dp),
                     colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.blueLight)),
                     elevation = CardDefaults.cardElevation(4.dp)
                 ) {
@@ -87,8 +95,7 @@ fun HomeScreen() {
                                 modifier = Modifier.padding(bottom = 8.dp),
                                 fontSize = 14.sp,
                                 fontWeight = FontWeight.Normal,
-                                color = colorResource(id = R.color.white),
-                                textAlign = TextAlign.Left
+                                color = colorResource(id = R.color.white)
                             )
                             OutlinedTextField(
                                 value = cidade,
@@ -108,8 +115,48 @@ fun HomeScreen() {
                                 shape = RoundedCornerShape(16.dp),
                                 keyboardOptions = KeyboardOptions(KeyboardCapitalization.Words)
                             )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Button(
+                                onClick = { /*TODO*/ },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(48.dp),
+                                shape = RoundedCornerShape(16.dp),
+                                colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.blue))
+                            ) {
+                                Text(
+                                    text = "Buscar",
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 16.sp
+                                )
+                            }
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Text(
+                                text = "ou",
+                                modifier = Modifier
+                                    .padding(bottom = 8.dp)
+                                    .fillMaxWidth(),
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.Normal,
+                                color = colorResource(id = R.color.white),
+                                textAlign = TextAlign.Center
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Button(
+                                onClick = { },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(48.dp),
+                                shape = RoundedCornerShape(16.dp),
+                                colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.blue))
+                            ) {
+                                Text(
+                                    text = "Buscar Localização Atual",
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 16.sp
+                                )
+                            }
                         }
-
                     }
                 }
             }
