@@ -1,10 +1,6 @@
 package br.com.fiap.aircheck.screens
 
-import android.content.Context
-import android.content.pm.PackageManager
-import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,10 +34,13 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat
 import br.com.fiap.aircheck.R
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.maps.model.LatLng
+import br.com.fiap.aircheck.components.CardAirQuality
+import br.com.fiap.aircheck.model.AirQualityResponse
+import br.com.fiap.aircheck.service.RetrofitFactory
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 @Composable
 fun HomeScreen() {
@@ -49,6 +48,10 @@ fun HomeScreen() {
     var cidade by remember {
         mutableStateOf("")
     }
+
+//    var listAirQuality by remember {
+//        mutableStateOf(AirQualityResponse())
+//    }
 
     Box(modifier = Modifier
         .fillMaxSize()
@@ -117,7 +120,25 @@ fun HomeScreen() {
                             )
                             Spacer(modifier = Modifier.height(16.dp))
                             Button(
-                                onClick = { /*TODO*/ },
+                                onClick = {
+                                    val call = RetrofitFactory().getAirQualityService().getAirQualityByCity(cidade)
+                                    call.enqueue(object : Callback<AirQualityResponse>{
+                                        override fun onResponse(
+                                            call: Call<AirQualityResponse>,
+                                            response: Response<AirQualityResponse>
+                                        ) {
+                                            Log.i("API", "onResponse: ${response.body()}")
+                                        }
+
+                                        override fun onFailure(
+                                            call: Call<AirQualityResponse>,
+                                            t: Throwable
+                                        ) {
+                                            Log.i("API", "error: ${t.message}")
+                                        }
+
+                                    })
+                                },
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(48.dp),
@@ -160,6 +181,7 @@ fun HomeScreen() {
                     }
                 }
             }
+            CardAirQuality(cidade = cidade)
         }
     }
 }
