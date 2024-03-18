@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -20,12 +21,12 @@ import br.com.fiap.aircheck.R
 import br.com.fiap.aircheck.model.AirQualityResponse
 
 @Composable
-fun CardAirQuality(cidade: String) {
+fun CardAirQuality(cidade: String, color: Int, aqi: Int, status: String) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
-        colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.blueLight)),
+        colors = CardDefaults.cardColors(containerColor = colorResource(id = color)),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
         Column(
@@ -42,13 +43,13 @@ fun CardAirQuality(cidade: String) {
             )
             Spacer(modifier = Modifier.height(12.dp))
             Text(
-                text = "74",
+                text = if(aqi != (-1)) aqi.toString() else "Qualidade do Ar",
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp,
                 color = colorResource(id = R.color.white)
             )
             Text(
-                text = "Moderado",
+                text = if(status != "") status else "Nível de Poluição",
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp,
                 color = colorResource(id = R.color.white)

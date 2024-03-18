@@ -22,6 +22,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -46,6 +47,18 @@ import retrofit2.Response
 fun HomeScreen() {
 
     var cidade by remember {
+        mutableStateOf("")
+    }
+
+    var colorAirQuality by remember {
+        mutableIntStateOf(R.color.gray)
+    }
+
+    var aqi by remember {
+        mutableIntStateOf(-1)
+    }
+
+    var statusAirQuality by remember {
         mutableStateOf("")
     }
 
@@ -181,7 +194,12 @@ fun HomeScreen() {
                     }
                 }
             }
-            CardAirQuality(cidade = cidade)
+            CardAirQuality(
+                cidade = cidade,
+                color = colorAirQuality,
+                aqi = aqi,
+                status = statusAirQuality
+            )
         }
     }
 }
