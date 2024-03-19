@@ -36,8 +36,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.fiap.aircheck.R
+import br.com.fiap.aircheck.colorCard
 import br.com.fiap.aircheck.components.CardAirQuality
 import br.com.fiap.aircheck.model.AirQualityResponse
+import br.com.fiap.aircheck.pollutionLevel
 import br.com.fiap.aircheck.service.RetrofitFactory
 import retrofit2.Call
 import retrofit2.Callback
@@ -62,10 +64,6 @@ fun HomeScreen() {
         mutableStateOf("")
     }
 
-//    var listAirQuality by remember {
-//        mutableStateOf(AirQualityResponse())
-//    }
-
     Box(modifier = Modifier
         .fillMaxSize()
     ) {
@@ -79,7 +77,7 @@ fun HomeScreen() {
                     modifier = Modifier
                         .offset(y = (-10).dp)
                         .fillMaxWidth()
-                        .height(450.dp),
+                        .height(360.dp),
                     colors = CardDefaults.cardColors(containerColor = colorResource(id = R.color.blueLight)),
                     elevation = CardDefaults.cardElevation(4.dp)
                 ) {
@@ -140,7 +138,9 @@ fun HomeScreen() {
                                             call: Call<AirQualityResponse>,
                                             response: Response<AirQualityResponse>
                                         ) {
-                                            Log.i("API", "onResponse: ${response.body()}")
+                                            aqi = response.body()?.data!!.aqi
+                                            statusAirQuality = pollutionLevel(aqi)
+                                            colorAirQuality = colorCard(aqi)
                                         }
 
                                         override fun onFailure(
@@ -160,32 +160,6 @@ fun HomeScreen() {
                             ) {
                                 Text(
                                     text = "Buscar",
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 16.sp
-                                )
-                            }
-                            Spacer(modifier = Modifier.height(16.dp))
-                            Text(
-                                text = "ou",
-                                modifier = Modifier
-                                    .padding(bottom = 8.dp)
-                                    .fillMaxWidth(),
-                                fontSize = 14.sp,
-                                fontWeight = FontWeight.Normal,
-                                color = colorResource(id = R.color.white),
-                                textAlign = TextAlign.Center
-                            )
-                            Spacer(modifier = Modifier.height(16.dp))
-                            Button(
-                                onClick = { },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .height(48.dp),
-                                shape = RoundedCornerShape(16.dp),
-                                colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.blue))
-                            ) {
-                                Text(
-                                    text = "Buscar Localização Atual",
                                     fontWeight = FontWeight.Bold,
                                     fontSize = 16.sp
                                 )

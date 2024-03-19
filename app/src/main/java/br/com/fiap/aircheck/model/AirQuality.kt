@@ -8,6 +8,5 @@ data class AirQualityResponse(
 
 data class AirQualityData(
     val aqi: Int,
-//    @SerializedName("t") val temp: Int = 0
 )
 
