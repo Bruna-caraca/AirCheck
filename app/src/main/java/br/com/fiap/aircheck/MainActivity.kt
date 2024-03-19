@@ -24,6 +24,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import br.com.fiap.aircheck.screens.AirQualityInfo
 import br.com.fiap.aircheck.screens.HomeScreen
 import br.com.fiap.aircheck.ui.theme.AirCheckTheme
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -46,7 +50,17 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    HomeScreen()
+                    val navController = rememberNavController()
+                    NavHost(
+                        navController = navController,
+                        startDestination = "homescreen") {
+                        composable(route = "homescreen") {
+                            HomeScreen(navController)
+                        }
+                        composable(route = "info/{aqi}") {
+                            AirQualityInfo(navController)
+                        }
+                    }
                 }
             }
         }

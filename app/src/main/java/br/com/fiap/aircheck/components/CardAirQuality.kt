@@ -36,20 +36,20 @@ fun CardAirQuality(cidade: String, color: Int, aqi: Int, status: String) {
                 .padding(12.dp)
         ) {
             Text(
-                text = if(cidade != "") cidade else "Cidade",
+                text = cidade,
                 fontWeight = FontWeight.Bold,
                 fontSize = 16.sp,
                 color = colorResource(id = R.color.white)
             )
             Spacer(modifier = Modifier.height(12.dp))
             Text(
-                text = if(aqi != (-1)) aqi.toString() else "Qualidade do Ar",
+                text = aqi.toString(),
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp,
                 color = colorResource(id = R.color.white)
             )
             Text(
-                text = if(status != "") status else "Nível de Poluição",
+                text = status,
                 fontWeight = FontWeight.Bold,
                 fontSize = 24.sp,
                 color = colorResource(id = R.color.white)

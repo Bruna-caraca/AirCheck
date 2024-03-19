@@ -35,6 +35,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import br.com.fiap.aircheck.R
 import br.com.fiap.aircheck.colorCard
 import br.com.fiap.aircheck.components.CardAirQuality
@@ -46,7 +47,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(navController: NavController) {
 
     var cidade by remember {
         mutableStateOf("")
@@ -62,6 +63,10 @@ fun HomeScreen() {
 
     var statusAirQuality by remember {
         mutableStateOf("")
+    }
+
+    var info by remember {
+        mutableStateOf(false)
     }
 
     Box(modifier = Modifier
@@ -141,6 +146,7 @@ fun HomeScreen() {
                                             aqi = response.body()?.data!!.aqi
                                             statusAirQuality = pollutionLevel(aqi)
                                             colorAirQuality = colorCard(aqi)
+                                            info = true
                                         }
 
                                         override fun onFailure(
@@ -168,12 +174,27 @@ fun HomeScreen() {
                     }
                 }
             }
+            if(info) {
             CardAirQuality(
                 cidade = cidade,
                 color = colorAirQuality,
                 aqi = aqi,
                 status = statusAirQuality
             )
+                Button(
+                    onClick = {
+                        navController.navigate("info/$aqi")
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                        .height(48.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.blue))
+                ) {
+                    Text(text = "Saiba Mais")
+                }
+            }
         }
     }
 }
