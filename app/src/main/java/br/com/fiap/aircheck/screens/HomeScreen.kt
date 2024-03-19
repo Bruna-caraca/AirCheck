@@ -160,6 +160,7 @@ fun HomeScreen(navController: NavController) {
                                                     statusAirQuality = pollutionLevel(aqi)
                                                     colorAirQuality = colorCard(aqi)
                                                     info = true
+                                                    error = false
                                                 }
                                             }
 
@@ -170,6 +171,7 @@ fun HomeScreen(navController: NavController) {
                                             t: Throwable
                                         ) {
                                             error = true
+                                            info = false
                                             Log.i("API", "error: ${t.message}")
                                         }
 
