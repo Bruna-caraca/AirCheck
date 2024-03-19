@@ -31,3 +31,14 @@ fun colorCard(aqi: Int): Int {
         R.color.darkRed
     }
 }
+
+fun colorCardByStatus(status: String): Int {
+    return when(status) {
+        "Boa" -> R.color.green
+        "Regular" -> R.color.yellow
+        "Inadequada" -> R.color.orange
+        "Má" -> R.color.red
+        "Péssima" -> R.color.purple
+        else -> R.color.darkRed
+    }
+}

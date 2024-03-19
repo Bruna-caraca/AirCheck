@@ -39,6 +39,7 @@ import androidx.navigation.NavController
 import br.com.fiap.aircheck.R
 import br.com.fiap.aircheck.colorCard
 import br.com.fiap.aircheck.components.CardAirQuality
+import br.com.fiap.aircheck.components.CardError
 import br.com.fiap.aircheck.model.AirQualityResponse
 import br.com.fiap.aircheck.pollutionLevel
 import br.com.fiap.aircheck.service.RetrofitFactory
@@ -50,6 +51,10 @@ import retrofit2.Response
 fun HomeScreen(navController: NavController) {
 
     var cidade by remember {
+        mutableStateOf("")
+    }
+
+    var cidadeResponse by remember {
         mutableStateOf("")
     }
 
@@ -66,6 +71,10 @@ fun HomeScreen(navController: NavController) {
     }
 
     var info by remember {
+        mutableStateOf(false)
+    }
+
+    var error by remember {
         mutableStateOf(false)
     }
 
@@ -143,16 +152,24 @@ fun HomeScreen(navController: NavController) {
                                             call: Call<AirQualityResponse>,
                                             response: Response<AirQualityResponse>
                                         ) {
-                                            aqi = response.body()?.data!!.aqi
-                                            statusAirQuality = pollutionLevel(aqi)
-                                            colorAirQuality = colorCard(aqi)
-                                            info = true
+                                            if(response.isSuccessful) {
+                                                val airQualityResponse = response.body()
+                                                if(airQualityResponse != null) {
+                                                    aqi = airQualityResponse.data.aqi
+                                                    cidadeResponse = airQualityResponse.data.city.name
+                                                    statusAirQuality = pollutionLevel(aqi)
+                                                    colorAirQuality = colorCard(aqi)
+                                                    info = true
+                                                }
+                                            }
+
                                         }
 
                                         override fun onFailure(
                                             call: Call<AirQualityResponse>,
                                             t: Throwable
                                         ) {
+                                            error = true
                                             Log.i("API", "error: ${t.message}")
                                         }
 
@@ -176,14 +193,14 @@ fun HomeScreen(navController: NavController) {
             }
             if(info) {
             CardAirQuality(
-                cidade = cidade,
+                cidade = cidadeResponse,
                 color = colorAirQuality,
                 aqi = aqi,
                 status = statusAirQuality
             )
                 Button(
                     onClick = {
-                        navController.navigate("info/$aqi")
+                        navController.navigate("info/$statusAirQuality")
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -194,6 +211,9 @@ fun HomeScreen(navController: NavController) {
                 ) {
                     Text(text = "Saiba Mais")
                 }
+            }
+            if(error) {
+                CardError()
             }
         }
     }
